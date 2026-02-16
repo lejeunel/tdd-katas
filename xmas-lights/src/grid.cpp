@@ -16,15 +16,14 @@ Grid::Grid(const int &a_n_rows, const int &a_n_cols) {
 }
 
 void Grid::activate_light(const int &row, const int &col) {
-  auto err_msg =
-      std::format("Cannot turn-on light at (row,col): ({},{}). "
-                  "Coordinate out of range for grid with dimension: ({},{})",
-                  row, col, n_rows, n_cols);
-
-  if ((row >= n_rows) || (col >= n_cols))
-    throw std::out_of_range(err_msg);
-
+  check_is_in_range(row, col, "turn-on");
   lights[row][col] = 1;
+}
+
+void Grid::disactivate_light(const int &row, const int &col) {
+
+  check_is_in_range(row, col, "turn-off");
+  lights[row][col] = 0;
 }
 
 int Grid::light_emission() {
@@ -35,4 +34,15 @@ int Grid::light_emission() {
     }
   }
   return sum;
+}
+
+void Grid::check_is_in_range(const int &row, const int &col,
+                             const std::string &action) {
+  auto err_msg =
+      std::format("Cannot {} light at (row,col): ({},{}). "
+                  "Coordinate out of range for grid with dimension: ({},{})",
+                  action, row, col, n_rows, n_cols);
+
+  if ((row >= n_rows) || (col >= n_cols))
+    throw std::out_of_range(err_msg);
 }

@@ -17,15 +17,13 @@ TEST_CASE("activate light in empty grid should fail",
   REQUIRE_THROWS_AS(grid.activate_light(0, 0), std::out_of_range);
 }
 
-TEST_CASE("empty grid should return zero light emission",
-          "[empty-grid-zero-emission]") {
+TEST_CASE("empty grid should return 0 emission", "[empty-grid-zero-emission]") {
   auto grid = Grid(0, 0);
   REQUIRE(grid.light_emission() == 0);
 }
 
-TEST_CASE(
-    "single-light grid with one litten up light should return 1 light emission",
-    "[one-grid-one-emission]") {
+TEST_CASE("single-light grid with one litten up light should return 1 emission",
+          "[one-grid-one-emission]") {
   auto grid = Grid(1, 1);
   grid.activate_light(0, 0);
   REQUIRE(grid.light_emission() == 1);
@@ -35,4 +33,18 @@ TEST_CASE("activate light out of range should fail",
           "[activate-light-out-of-range]") {
   auto grid = Grid(1, 2);
   REQUIRE_THROWS_AS(grid.activate_light(1, 1), std::out_of_range);
+}
+
+TEST_CASE("disactivate light out of range should fail",
+          "[disactivate-light-out-of-range]") {
+  auto grid = Grid(1, 2);
+  REQUIRE_THROWS_AS(grid.disactivate_light(1, 1), std::out_of_range);
+}
+
+TEST_CASE("activate and disactivate the same light should return 0 emission",
+          "[same-light-on-off-zero-emission]") {
+  auto grid = Grid(1, 1);
+  grid.activate_light(0, 0);
+  grid.disactivate_light(0, 0);
+  REQUIRE(grid.light_emission() == 0);
 }
