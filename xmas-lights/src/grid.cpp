@@ -26,6 +26,15 @@ void Grid::disactivate_light(const int &row, const int &col) {
   lights[row][col] = 0;
 }
 
+void Grid::toggle_light(const int &row, const int &col) {
+
+  check_is_in_range(row, col, "turn-off");
+  if (lights[row][col] == 1)
+    lights[row][col] = 0;
+  else
+    lights[row][col] = 1;
+}
+
 int Grid::light_emission() {
   int sum = 0;
   for (const auto &row : lights) {
@@ -46,6 +55,12 @@ void Grid::disactivate_region(const Region &region) {
   for (int r = region.row_start; r < region.row_end + 1; ++r)
     for (int c = region.col_start; c < region.col_end + 1; ++c)
       disactivate_light(r, c);
+}
+
+void Grid::toggle_region(const Region &region) {
+  for (int r = region.row_start; r < region.row_end + 1; ++r)
+    for (int c = region.col_start; c < region.col_end + 1; ++c)
+      toggle_light(r, c);
 }
 
 void Grid::check_is_in_range(const int &row, const int &col,

@@ -16,8 +16,10 @@ class Grid {
     Grid(const int &n_rows, const int &n_cols);
     void activate_light(const int &row, const int &col);
     void disactivate_light(const int &row, const int &col);
+    void toggle_light(const int &row, const int &col);
     void activate_region(const Region &r);
     void disactivate_region(const Region &r);
+    void toggle_region(const Region &r);
     int light_emission();
 
   private:

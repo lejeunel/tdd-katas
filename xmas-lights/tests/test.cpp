@@ -65,3 +65,27 @@ TEST_CASE(
   grid.disactivate_region(region);
   REQUIRE(grid.light_emission() == 0);
 }
+
+TEST_CASE("toggling a turned on light should return 0 emission",
+          "[toggling-one-light-from-on-zero-emission]") {
+  auto grid = Grid(1, 1);
+  grid.activate_light(0, 0);
+  grid.toggle_light(0, 0);
+  REQUIRE(grid.light_emission() == 0);
+}
+
+TEST_CASE("toggling a turned off light should return 1 emission",
+          "[toggling-one-light-from-off-one-emission]") {
+  auto grid = Grid(1, 1);
+  grid.toggle_light(0, 0);
+  REQUIRE(grid.light_emission() == 1);
+}
+
+TEST_CASE("toggling a turned on region should return 0 emission",
+          "[toggling-region-from-on-zero-emission]") {
+  auto grid = Grid(1, 2);
+  auto region = Region{0, 0, 0, 1};
+  grid.activate_region(region);
+  grid.toggle_region(region);
+  REQUIRE(grid.light_emission() == 0);
+}
