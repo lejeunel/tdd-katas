@@ -36,6 +36,18 @@ int Grid::light_emission() {
   return sum;
 }
 
+void Grid::activate_region(const Region &region) {
+  for (int r = region.row_start; r < region.row_end + 1; ++r)
+    for (int c = region.col_start; c < region.col_end + 1; ++c)
+      activate_light(r, c);
+}
+
+void Grid::disactivate_region(const Region &region) {
+  for (int r = region.row_start; r < region.row_end + 1; ++r)
+    for (int c = region.col_start; c < region.col_end + 1; ++c)
+      disactivate_light(r, c);
+}
+
 void Grid::check_is_in_range(const int &row, const int &col,
                              const std::string &action) {
   auto err_msg =

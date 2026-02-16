@@ -48,3 +48,20 @@ TEST_CASE("activate and disactivate the same light should return 0 emission",
   grid.disactivate_light(0, 0);
   REQUIRE(grid.light_emission() == 0);
 }
+
+TEST_CASE("activate two elements region should return 2 emission",
+          "[two-elements-region-two-emission]") {
+  auto grid = Grid(1, 2);
+  grid.activate_region(Region{0, 0, 0, 1});
+  REQUIRE(grid.light_emission() == 2);
+}
+
+TEST_CASE(
+    "activate and disactivate two elements region should return 0 emission",
+    "[two-elements-region-two-emission]") {
+  auto grid = Grid(1, 2);
+  auto region = Region{0, 0, 0, 1};
+  grid.activate_region(region);
+  grid.disactivate_region(region);
+  REQUIRE(grid.light_emission() == 0);
+}
