@@ -11,9 +11,8 @@ Grid::Grid(const int &a_n_rows, const int &a_n_cols) {
   }
   n_rows = a_n_rows;
   n_cols = a_n_cols;
-  n_lights = 0;
 }
-int Grid::light_emission() {
+int Grid::light_units() {
   auto total_light_units = 0;
   for (std::vector<Region>::iterator iter = regions.begin();
        iter != regions.end(); ++iter)

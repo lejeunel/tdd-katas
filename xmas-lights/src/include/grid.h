@@ -10,12 +10,11 @@ public:
   void activate(Region r);
   void disactivate(Region r);
   void toggle(const Region &r);
-  int light_emission();
+  int light_units();
 
 private:
   int n_rows;
   int n_cols;
-  int n_lights;
   std::vector<Region> regions;
   void check_is_in_range(const Region &region);
   bool containing_region_exists(const Region &region);

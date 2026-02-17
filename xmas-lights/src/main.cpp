@@ -24,7 +24,7 @@ auto main() -> int {
   // toggle 831,394 through 904,860
   grid.toggle_region(Region{831, 904, 394, 960});
 
-  std::cout << "light emission: " << grid.light_emission() << std::endl;
+  std::cout << "light emission: " << grid.light_units() << std::endl;
 
   return 0;
 }

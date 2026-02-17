@@ -13,5 +13,5 @@ TEST_CASE("Create grid with number of columns less than one should fail",
 
 TEST_CASE("Grid with no activation should return 0", "[grid-not-activated]") {
   auto grid = Grid(1, 1);
-  REQUIRE(grid.light_emission() == 0);
+  REQUIRE(grid.light_units() == 0);
 }
