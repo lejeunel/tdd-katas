@@ -9,14 +9,18 @@ class Region {
     int size() const;
     bool operator==(const Region &other) const;
     bool contains(const Region &other) const;
+    int overlaps(const Region &other) const;
     int get_row_end() const;
     int get_col_end() const;
+    int get_light_units() const;
+    void set_light_units(const int &light_units);
 
   private:
     int row_start = 0;
     int col_start = 0;
     int row_end = 0;
     int col_end = 0;
+    int light_units = 0;
 };
 
 #endif // REGION_H_

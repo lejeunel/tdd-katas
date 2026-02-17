@@ -52,8 +52,8 @@ TEST_CASE("Activate a redundant region later on should have no effect",
   REQUIRE(grid.light_emission() == 2);
 }
 
-TEST_CASE("Activate an overlapping region should have no effect",
-          "[activate-overlapping]") {
+TEST_CASE("Activate a region contained in another should have no effect",
+          "[activate-region-contained-in-another]") {
   auto grid = Grid(1, 3);
   grid.activate(Region(0, 0, 0, 2));
   grid.activate(Region(0, 1, 0, 2));
@@ -67,16 +67,58 @@ TEST_CASE("Disactivate grid not activated yet",
   REQUIRE(grid.light_emission() == 0);
 }
 
-TEST_CASE("Disactivate part not activated yet", "[disactivate-outside]") {
+TEST_CASE("Disactivate part not activated yet has no effect",
+          "[disactivate-outside-no-effect]") {
   auto grid = Grid(1, 4);
   grid.activate(Region(0, 0, 0, 2));
   grid.disactivate(Region(0, 3, 0, 3));
   REQUIRE(grid.light_emission() == 3);
 }
 
-TEST_CASE("Disactivate from single", "[disactivate-from-one]") {
+TEST_CASE("Disactivate one region contained in another",
+          "[disactivate-contained-region]") {
   auto grid = Grid(1, 3);
   grid.activate(Region(0, 0, 0, 2));
   grid.disactivate(Region(0, 0, 0, 1));
   REQUIRE(grid.light_emission() == 1);
+}
+
+TEST_CASE("Disactivate overlapping row (span 1)",
+          "[disactivate-overlapping-row-span-1]") {
+  auto grid = Grid(1, 5);
+  grid.activate(Region(0, 0, 0, 2));
+  grid.disactivate(Region(0, 2, 0, 3));
+  REQUIRE(grid.light_emission() == 2);
+}
+
+TEST_CASE("Disactivate overlapping columns (span 1)",
+          "[disactivate-overlapping-col-span-1]") {
+  auto grid = Grid(5, 1);
+  grid.activate(Region(0, 0, 2, 0));
+  grid.disactivate(Region(2, 0, 3, 0));
+  REQUIRE(grid.light_emission() == 2);
+}
+
+TEST_CASE("Disactivate overlapping row (span 2)",
+          "[disactivate-overlapping-row-span-2]") {
+  auto grid = Grid(1, 5);
+  grid.activate(Region(0, 0, 0, 2));
+  grid.disactivate(Region(0, 1, 0, 3));
+  REQUIRE(grid.light_emission() == 1);
+}
+
+TEST_CASE("Disactivate overlapping columns (span 2)",
+          "[disactivate-overlapping-col-span-2]") {
+  auto grid = Grid(5, 1);
+  grid.activate(Region(0, 0, 3, 0));
+  grid.disactivate(Region(2, 0, 4, 0));
+  REQUIRE(grid.light_emission() == 2);
+}
+
+TEST_CASE("Activate partly overlapping regions",
+          "[activate-partly-overlapping-regions]") {
+  auto grid = Grid(1, 5);
+  grid.activate(Region(0, 0, 0, 2));
+  grid.activate(Region(0, 1, 0, 3));
+  REQUIRE(grid.light_emission() == 4);
 }

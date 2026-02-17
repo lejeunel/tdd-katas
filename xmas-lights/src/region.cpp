@@ -39,3 +39,22 @@ bool Region::contains(const Region &other) const {
 
   return false;
 }
+
+int Region::overlaps(const Region &other) const {
+  int n_overlapping_cols = 0;
+  if ((other.col_start >= col_start) && (other.col_start <= col_end)) {
+    n_overlapping_cols = col_end - other.col_start + 1;
+  }
+  int n_overlapping_rows = 0;
+  if ((other.row_start >= row_start) && (other.row_start <= row_end)) {
+    n_overlapping_rows = row_end - other.row_start + 1;
+  }
+
+  return n_overlapping_cols * n_overlapping_rows;
+}
+
+int Region::get_light_units() const { return light_units; }
+
+void Region::set_light_units(const int &a_light_units) {
+  light_units = a_light_units;
+}

@@ -13,14 +13,20 @@ Grid::Grid(const int &a_n_rows, const int &a_n_cols) {
   n_cols = a_n_cols;
   n_lights = 0;
 }
-int Grid::light_emission() { return n_lights; }
+int Grid::light_emission() {
+  auto total_light_units = 0;
+  for (std::vector<Region>::iterator iter = regions.begin();
+       iter != regions.end(); ++iter)
+    total_light_units += (*iter).get_light_units();
+  return total_light_units;
+}
 
-bool Grid::is_region_redundant(const Region &region) {
-  if (added_regions.size() == 0)
+bool Grid::containing_region_exists(const Region &region) {
+  if (regions.size() == 0)
     return false;
 
-  for (std::vector<Region>::iterator iter = added_regions.begin();
-       iter != added_regions.end(); ++iter) {
+  for (std::vector<Region>::iterator iter = regions.begin();
+       iter != regions.end(); ++iter) {
 
     if ((*iter).contains(region))
       return true;
@@ -28,26 +34,37 @@ bool Grid::is_region_redundant(const Region &region) {
   return false;
 }
 
-void Grid::activate(const Region &r) {
-  check_is_in_range(r);
-  if (is_region_redundant(r))
-    return;
-  added_regions.push_back(r);
-  n_lights += r.size();
-}
+int Grid::overlap_existing_region(const Region &region) {
+  if (regions.size() == 0)
+    return 0;
 
-void Grid::disactivate(const Region &r) {
-  check_is_in_range(r);
-  if (added_regions.size() > 0) {
-    for (std::vector<Region>::iterator iter = added_regions.begin();
-         iter != added_regions.end(); ++iter) {
-      if ((*iter).contains(r))
-        n_lights -= r.size();
-    }
-    return;
+  int n_overlap = 0;
+  for (std::vector<Region>::iterator iter = regions.begin();
+       iter != regions.end(); ++iter) {
+    n_overlap += (*iter).overlaps(region);
   }
 
-  n_lights = 0;
+  return n_overlap;
+}
+
+void Grid::activate(Region r) {
+  check_is_in_range(r);
+  if (containing_region_exists(r))
+    return;
+  else {
+    r.set_light_units(r.size() - overlap_existing_region(r));
+    regions.push_back(r);
+  }
+}
+
+void Grid::disactivate(Region r) {
+  check_is_in_range(r);
+  if (containing_region_exists(r))
+    r.set_light_units(-r.size());
+  else
+    r.set_light_units(-overlap_existing_region(r));
+
+  regions.push_back(r);
 }
 
 void Grid::check_is_in_range(const Region &region) {

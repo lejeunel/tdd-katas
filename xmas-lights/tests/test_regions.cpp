@@ -38,8 +38,64 @@ TEST_CASE("Comparing two different regions", "[compare-identical-regions]") {
   REQUIRE(first_region != second_region);
 }
 
-TEST_CASE("Overlapping region should be contained", "[overlapping-regions]") {
+TEST_CASE("detect row-region not containing another",
+          "[not-containing-regions-row]") {
   auto first_region = Region(0, 0, 0, 3);
-  auto overlapping_region = Region(0, 1, 0, 2);
-  REQUIRE(first_region.contains(overlapping_region));
+  auto not_contained_region = Region(0, 4, 0, 4);
+  REQUIRE(first_region.contains(not_contained_region) == false);
+}
+
+TEST_CASE("detect row-region containing another", "[containing-regions-row]") {
+  auto first_region = Region(0, 0, 0, 3);
+  auto contained_region = Region(0, 1, 0, 2);
+  REQUIRE(first_region.contains(contained_region));
+}
+
+TEST_CASE("detect column-region not containing another",
+          "[not-containing-regions-col]") {
+  auto first_region = Region(0, 0, 3, 0);
+  auto not_contained_region = Region(4, 0, 5, 0);
+  REQUIRE(first_region.contains(not_contained_region) == false);
+}
+
+TEST_CASE("detect column-region containing another",
+          "[containing-regions-col]") {
+  auto first_region = Region(0, 0, 3, 0);
+  auto contained_region = Region(0, 0, 2, 0);
+  REQUIRE(first_region.contains(contained_region));
+}
+
+TEST_CASE("non-overlapping rows", "[not-overlapping-regions]") {
+  auto first_region = Region(0, 0, 0, 3);
+  auto not_overlapping_region = Region(0, 4, 0, 4);
+  REQUIRE(first_region.overlaps(not_overlapping_region) == 0);
+}
+
+TEST_CASE("overlapping rows (span=1)", "[overlapping-rows-span-1]") {
+  auto first_region = Region(0, 0, 0, 3);
+  auto overlapping_region = Region(0, 3, 0, 4);
+  REQUIRE(first_region.overlaps(overlapping_region) == 1);
+}
+
+TEST_CASE("overlapping rows (span=2)", "[overlapping-rows-span-2]") {
+  auto first_region = Region(0, 0, 0, 3);
+  auto overlapping_region = Region(0, 2, 0, 4);
+  REQUIRE(first_region.overlaps(overlapping_region) == 2);
+}
+
+TEST_CASE("overlapping columns (span=2)", "[overlapping-cols-span-2]") {
+  auto first_region = Region(0, 0, 3, 0);
+  auto overlapping_region = Region(2, 0, 4, 0);
+  REQUIRE(first_region.overlaps(overlapping_region) == 2);
+}
+
+TEST_CASE("new region has zero light emission", "[new-region-zero-light]") {
+  auto region = Region(0, 0, 3, 0);
+  REQUIRE(region.get_light_units() == 0);
+}
+
+TEST_CASE("setting light units", "[set-light-units]") {
+  auto region = Region(0, 0, 3, 0);
+  region.set_light_units(-1);
+  REQUIRE(region.get_light_units() == -1);
 }
