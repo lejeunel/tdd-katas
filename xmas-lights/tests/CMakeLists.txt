@@ -2,6 +2,8 @@ find_package(Catch2 REQUIRED)
 
 add_executable(test
   main.cpp
+  test_regions.cpp
+  test_grid.cpp
   test.cpp
 )
 

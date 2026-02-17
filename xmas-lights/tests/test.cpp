@@ -1,91 +1,49 @@
 #include "../src/include/grid.h"
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Create grid with negative number of rows should fail",
-          "[grid-invalid-n-rows]") {
-  REQUIRE_THROWS_AS(Grid(-1, 1), std::invalid_argument);
-}
-
-TEST_CASE("Create grid with negative number of columns should fail",
-          "[grid-invalid-n-cols]") {
-  REQUIRE_THROWS_AS(Grid(1, -1), std::invalid_argument);
-}
-
-TEST_CASE("activate light in empty grid should fail",
-          "[turn-on-single-light]") {
-  auto grid = Grid(0, 0);
-  REQUIRE_THROWS_AS(grid.activate_light(0, 0), std::out_of_range);
-}
-
-TEST_CASE("empty grid should return 0 emission", "[empty-grid-zero-emission]") {
-  auto grid = Grid(0, 0);
-  REQUIRE(grid.light_emission() == 0);
-}
-
-TEST_CASE("single-light grid with one litten up light should return 1 emission",
-          "[one-grid-one-emission]") {
+TEST_CASE("Activate region filling the grid of size 1 should return 1",
+          "[activate-one-one-region]") {
   auto grid = Grid(1, 1);
-  grid.activate_light(0, 0);
+  grid.activate(Region(0, 0, 0, 0));
   REQUIRE(grid.light_emission() == 1);
 }
 
-TEST_CASE("activate light out of range should fail",
-          "[activate-light-out-of-range]") {
+TEST_CASE("Activate region filling the grid of size 2 should return 2",
+          "[activate-one-two-region]") {
   auto grid = Grid(1, 2);
-  REQUIRE_THROWS_AS(grid.activate_light(1, 1), std::out_of_range);
-}
-
-TEST_CASE("disactivate light out of range should fail",
-          "[disactivate-light-out-of-range]") {
-  auto grid = Grid(1, 2);
-  REQUIRE_THROWS_AS(grid.disactivate_light(1, 1), std::out_of_range);
-}
-
-TEST_CASE("activate and disactivate the same light should return 0 emission",
-          "[same-light-on-off-zero-emission]") {
-  auto grid = Grid(1, 1);
-  grid.activate_light(0, 0);
-  grid.disactivate_light(0, 0);
-  REQUIRE(grid.light_emission() == 0);
-}
-
-TEST_CASE("activate two elements region should return 2 emission",
-          "[two-elements-region-two-emission]") {
-  auto grid = Grid(1, 2);
-  grid.activate_region(Region{0, 0, 0, 1});
+  grid.activate(Region(0, 0, 0, 1));
   REQUIRE(grid.light_emission() == 2);
 }
 
-TEST_CASE(
-    "activate and disactivate two elements region should return 0 emission",
-    "[two-elements-region-two-emission]") {
+TEST_CASE("Activate two disjoint regions of size 1 should return 2",
+          "[activate-two-disjoint]") {
   auto grid = Grid(1, 2);
-  auto region = Region{0, 0, 0, 1};
-  grid.activate_region(region);
-  grid.disactivate_region(region);
-  REQUIRE(grid.light_emission() == 0);
+  grid.activate(Region(0, 0, 0, 0));
+  grid.activate(Region(0, 1, 0, 1));
+  REQUIRE(grid.light_emission() == 2);
 }
 
-TEST_CASE("toggling a turned on light should return 0 emission",
-          "[toggling-one-light-from-on-zero-emission]") {
-  auto grid = Grid(1, 1);
-  grid.activate_light(0, 0);
-  grid.toggle_light(0, 0);
-  REQUIRE(grid.light_emission() == 0);
-}
-
-TEST_CASE("toggling a turned off light should return 1 emission",
-          "[toggling-one-light-from-off-one-emission]") {
-  auto grid = Grid(1, 1);
-  grid.toggle_light(0, 0);
+TEST_CASE("Activate two redundant regions should have no effect",
+          "[activate-two-identical]") {
+  auto grid = Grid(1, 2);
+  grid.activate(Region(0, 1, 0, 1));
+  grid.activate(Region(0, 1, 0, 1));
   REQUIRE(grid.light_emission() == 1);
 }
 
-TEST_CASE("toggling a turned on region should return 0 emission",
-          "[toggling-region-from-on-zero-emission]") {
+TEST_CASE("Activate a redundant region later on should have no effect",
+          "[activate-identical-later]") {
   auto grid = Grid(1, 2);
-  auto region = Region{0, 0, 0, 1};
-  grid.activate_region(region);
-  grid.toggle_region(region);
-  REQUIRE(grid.light_emission() == 0);
+  grid.activate(Region(0, 1, 0, 1));
+  grid.activate(Region(0, 0, 0, 0));
+  grid.activate(Region(0, 1, 0, 1));
+  REQUIRE(grid.light_emission() == 2);
+}
+
+TEST_CASE("Activate an overlapping region should have no effect",
+          "[activate-overlapping]") {
+  auto grid = Grid(1, 3);
+  grid.activate(Region(0, 0, 0, 3));
+  grid.activate(Region(0, 1, 0, 2));
+  REQUIRE(grid.light_emission() == 4);
 }

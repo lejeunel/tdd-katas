@@ -3,64 +3,37 @@
 #include <stdexcept>
 
 Grid::Grid(const int &a_n_rows, const int &a_n_cols) {
-  if (a_n_rows < 0) {
-    throw std::invalid_argument("Number of rows should be non-negative");
+  if (a_n_rows < 1) {
+    throw std::invalid_argument("Number of rows should be at least 1");
   }
-  if (a_n_cols < 0) {
-    throw std::invalid_argument("Number of columns should be non-negative");
+  if (a_n_cols < 1) {
+    throw std::invalid_argument("Number of columns should be at least 1");
   }
   n_rows = a_n_rows;
   n_cols = a_n_cols;
-
-  lights.resize(n_rows, std::vector<int>(n_cols, 0));
+  n_lights = 0;
 }
+int Grid::light_emission() { return n_lights; }
 
-void Grid::activate_light(const int &row, const int &col) {
-  check_is_in_range(row, col, "turn-on");
-  lights[row][col] = 1;
-}
+bool Grid::is_operation_redundant(const Operation &operation) {
+  if (operations.size() == 0)
+    return false;
 
-void Grid::disactivate_light(const int &row, const int &col) {
+  for (std::vector<Operation>::reverse_iterator riter = operations.rbegin();
+       riter != operations.rend(); ++riter) {
 
-  check_is_in_range(row, col, "turn-off");
-  lights[row][col] = 0;
-}
-
-void Grid::toggle_light(const int &row, const int &col) {
-
-  check_is_in_range(row, col, "turn-off");
-  if (lights[row][col] == 1)
-    lights[row][col] = 0;
-  else
-    lights[row][col] = 1;
-}
-
-int Grid::light_emission() {
-  int sum = 0;
-  for (const auto &row : lights) {
-    for (const auto &val : row) {
-      sum += val;
-    }
+    if ((*riter).get_region().contains(operation.get_region()))
+      return true;
   }
-  return sum;
+  return false;
 }
 
-void Grid::activate_region(const Region &region) {
-  for (int r = region.row_start; r < region.row_end + 1; ++r)
-    for (int c = region.col_start; c < region.col_end + 1; ++c)
-      activate_light(r, c);
-}
-
-void Grid::disactivate_region(const Region &region) {
-  for (int r = region.row_start; r < region.row_end + 1; ++r)
-    for (int c = region.col_start; c < region.col_end + 1; ++c)
-      disactivate_light(r, c);
-}
-
-void Grid::toggle_region(const Region &region) {
-  for (int r = region.row_start; r < region.row_end + 1; ++r)
-    for (int c = region.col_start; c < region.col_end + 1; ++c)
-      toggle_light(r, c);
+void Grid::activate(const Region &r) {
+  auto new_operation = Operation(r);
+  if (is_operation_redundant(new_operation))
+    return;
+  operations.push_back(new_operation);
+  n_lights += r.size();
 }
 
 void Grid::check_is_in_range(const int &row, const int &col,
