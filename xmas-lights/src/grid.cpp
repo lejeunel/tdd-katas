@@ -68,9 +68,10 @@ void Grid::disactivate(Region r) {
 }
 
 void Grid::check_is_in_range(const Region &region) {
-  auto err_msg = std::format("Cannot use region. Coordinate out of range for "
-                             "grid with dimension: ({},{})",
-                             n_rows, n_cols);
+  auto err_msg =
+      std::format("Cannot use region {}. Coordinate out of range for "
+                  "grid with dimension: ({},{})",
+                  region.to_str(), n_rows, n_cols);
 
   if ((region.get_row_end() > n_rows - 1) ||
       (region.get_col_end() > n_cols - 1))

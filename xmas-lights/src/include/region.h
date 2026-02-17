@@ -1,6 +1,8 @@
 #ifndef REGION_H_
 #define REGION_H_
 
+#include <iostream>
+
 class Region {
   public:
     Region(const int &row_start, const int &col_start, const int &row_end,
@@ -14,6 +16,8 @@ class Region {
     int get_col_end() const;
     int get_light_units() const;
     void set_light_units(const int &light_units);
+    std::string to_str() const;
+    friend std::ostream &operator<<(std::ostream &os, const Region &region);
 
   private:
     int row_start = 0;

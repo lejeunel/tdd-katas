@@ -20,6 +20,17 @@ Region::Region(const int &a_row_start, const int &a_col_start,
 }
 
 Region::Region() : row_start(0), col_start(0), row_end(0), col_end(0) {}
+
+std::string Region::to_str() const {
+  return std::format("({},{}), ({},{})", row_start, col_start, row_end,
+                     col_end);
+}
+
+std::ostream &operator<<(std::ostream &os, const Region &region) {
+  os << region.to_str();
+  return os;
+}
+
 int Region::get_row_end() const { return row_end; }
 int Region::get_col_end() const { return col_end; }
 
