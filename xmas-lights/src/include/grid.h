@@ -1,9 +1,7 @@
 #ifndef GRID_H_
 #define GRID_H_
 
-#include "operation.h"
 #include "region.h"
-#include <string>
 #include <vector>
 
 class Grid {
@@ -18,10 +16,9 @@ private:
   int n_rows;
   int n_cols;
   int n_lights;
-  std::vector<Operation> operations;
-  void check_is_in_range(const int &row, const int &col,
-                         const std::string &action);
-  bool is_operation_redundant(const Operation &operation);
+  std::vector<Region> added_regions;
+  void check_is_in_range(const Region &region);
+  bool is_region_redundant(const Region &region);
 };
 
 #endif // GRID_H_

@@ -9,6 +9,8 @@ class Region {
     int size() const;
     bool operator==(const Region &other) const;
     bool contains(const Region &other) const;
+    int get_row_end() const;
+    int get_col_end() const;
 
   private:
     int row_start = 0;

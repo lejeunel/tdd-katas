@@ -1,7 +1,6 @@
 add_library(xmas-lights
   grid.cpp
   region.cpp
-  operation.cpp
 )
 add_executable(xmas-lights-bin
   main.cpp)

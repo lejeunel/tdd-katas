@@ -20,6 +20,8 @@ Region::Region(const int &a_row_start, const int &a_col_start,
 }
 
 Region::Region() : row_start(0), col_start(0), row_end(0), col_end(0) {}
+int Region::get_row_end() const { return row_end; }
+int Region::get_col_end() const { return col_end; }
 
 int Region::size() const {
   return (row_end - row_start + 1) * (col_end - col_start + 1);
