@@ -20,17 +20,31 @@ int Grid::light_units() {
   return total_light_units;
 }
 
-bool Grid::containing_region_exists(const Region &region) {
-  if (regions.size() == 0)
-    return false;
+void Grid::activate(Region r) {
+  check_is_in_range(r);
+  r.set_light_units(r.size() - overlap_existing_region(r));
+  regions.push_back(r);
+}
 
-  for (std::vector<Region>::iterator iter = regions.begin();
-       iter != regions.end(); ++iter) {
+void Grid::toggle(Region r) {
+  check_is_in_range(r);
+  auto overlap = overlap_existing_region(r);
+  if (overlap == 0)
+    r.set_light_units(r.size());
+  else
+    r.set_light_units(-overlap);
+  regions.push_back(r);
+}
 
-    if ((*iter).contains(region))
-      return true;
-  }
-  return false;
+void Grid::disactivate(Region r) {
+  check_is_in_range(r);
+  auto overlap = overlap_existing_region(r);
+  if (overlap >= r.size())
+    r.set_light_units(-r.size());
+  else
+    r.set_light_units(-overlap);
+
+  regions.push_back(r);
 }
 
 int Grid::overlap_existing_region(const Region &region) {
@@ -44,26 +58,6 @@ int Grid::overlap_existing_region(const Region &region) {
   }
 
   return n_overlap;
-}
-
-void Grid::activate(Region r) {
-  check_is_in_range(r);
-  if (containing_region_exists(r))
-    return;
-  else {
-    r.set_light_units(r.size() - overlap_existing_region(r));
-    regions.push_back(r);
-  }
-}
-
-void Grid::disactivate(Region r) {
-  check_is_in_range(r);
-  if (containing_region_exists(r))
-    r.set_light_units(-r.size());
-  else
-    r.set_light_units(-overlap_existing_region(r));
-
-  regions.push_back(r);
 }
 
 void Grid::check_is_in_range(const Region &region) {

@@ -9,7 +9,7 @@ public:
   Grid(const int &n_rows, const int &n_cols);
   void activate(Region r);
   void disactivate(Region r);
-  void toggle(const Region &r);
+  void toggle(Region r);
   int light_units();
 
 private:
@@ -17,7 +17,6 @@ private:
   int n_cols;
   std::vector<Region> regions;
   void check_is_in_range(const Region &region);
-  bool containing_region_exists(const Region &region);
   int overlap_existing_region(const Region &region);
 };
 

@@ -124,10 +124,38 @@ TEST_CASE("Activate partly overlapping regions",
 }
 
 TEST_CASE("Disactivate row that overlaps two rows",
-          "[disactivate-overlapping-col-span-2]") {
+          "[disactivate-two-overlapping-row-span-2]") {
   auto grid = Grid(1, 5);
   grid.activate(Region(0, 0, 0, 1));
   grid.activate(Region(0, 1, 0, 4));
   grid.disactivate(Region(0, 1, 0, 2));
   REQUIRE(grid.light_units() == 3);
+}
+
+TEST_CASE("Disactivate col that overlaps two cols",
+          "[disactivate-two-overlapping-col-span-2]") {
+  auto grid = Grid(5, 1);
+  grid.activate(Region(0, 0, 1, 0));
+  grid.activate(Region(1, 0, 4, 0));
+  grid.disactivate(Region(1, 0, 2, 0));
+  REQUIRE(grid.light_units() == 3);
+}
+
+TEST_CASE("Toggle region that spans outside grid should fail",
+          "[toggle-out-of-range-region]") {
+  auto grid = Grid(1, 1);
+  REQUIRE_THROWS_AS(grid.toggle(Region(0, 0, 0, 1)), std::out_of_range);
+}
+
+TEST_CASE("Toggling fresh grid should activate", "[toggling-fresh]") {
+  auto grid = Grid(1, 1);
+  grid.toggle(Region(0, 0, 0, 0));
+  REQUIRE(grid.light_units() == 1);
+}
+
+TEST_CASE("Toggling activated grid should disactivate", "[toggling-fresh]") {
+  auto grid = Grid(1, 1);
+  grid.activate(Region(0, 0, 0, 0));
+  grid.toggle(Region(0, 0, 0, 0));
+  REQUIRE(grid.light_units() == 0);
 }
