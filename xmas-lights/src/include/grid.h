@@ -10,7 +10,7 @@ public:
   void activate(Region r);
   void disactivate(Region r);
   void toggle(Region r);
-  int light_units();
+  int luminous_power();
 
 private:
   int n_rows;
@@ -19,6 +19,7 @@ private:
   void check_is_in_range(const Region &region);
   std::vector<const Region *> find_overlapping_regions(const Region &region);
   int overlap_area(const Region &region);
+  void add_region(const Region &region);
 };
 
 #endif // GRID_H_

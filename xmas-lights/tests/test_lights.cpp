@@ -13,18 +13,11 @@ TEST_CASE("Disactivate region that spans outside grid should fail",
   REQUIRE_THROWS_AS(grid.disactivate(Region(0, 0, 0, 1)), std::out_of_range);
 }
 
-TEST_CASE("Activate region filling the grid of size 1 should return 1",
-          "[activate-one-one-region]") {
-  auto grid = Grid(1, 1);
-  grid.activate(Region(0, 0, 0, 0));
-  REQUIRE(grid.light_units() == 1);
-}
-
 TEST_CASE("Activate region filling the grid of size 2 should return 2",
           "[activate-one-two-region]") {
   auto grid = Grid(1, 2);
   grid.activate(Region(0, 0, 0, 1));
-  REQUIRE(grid.light_units() == 2);
+  REQUIRE(grid.luminous_power() == 2);
 }
 
 TEST_CASE("Activate two disjoint regions of size 1 should return 2",
@@ -32,24 +25,24 @@ TEST_CASE("Activate two disjoint regions of size 1 should return 2",
   auto grid = Grid(1, 2);
   grid.activate(Region(0, 0, 0, 0));
   grid.activate(Region(0, 1, 0, 1));
-  REQUIRE(grid.light_units() == 2);
+  REQUIRE(grid.luminous_power() == 2);
 }
 
-TEST_CASE("Activate two redundant regions should have no effect",
+TEST_CASE("Activate two identical regions add contributions",
           "[activate-two-identical]") {
   auto grid = Grid(1, 2);
   grid.activate(Region(0, 1, 0, 1));
   grid.activate(Region(0, 1, 0, 1));
-  REQUIRE(grid.light_units() == 1);
+  REQUIRE(grid.luminous_power() == 2);
 }
 
-TEST_CASE("Activate a redundant region later on should have no effect",
+TEST_CASE("Activate the same region later on should add",
           "[activate-identical-later]") {
   auto grid = Grid(1, 2);
   grid.activate(Region(0, 1, 0, 1));
   grid.activate(Region(0, 0, 0, 0));
   grid.activate(Region(0, 1, 0, 1));
-  REQUIRE(grid.light_units() == 2);
+  REQUIRE(grid.luminous_power() == 3);
 }
 
 TEST_CASE("Activate a region contained in another should have no effect",
@@ -57,14 +50,14 @@ TEST_CASE("Activate a region contained in another should have no effect",
   auto grid = Grid(1, 3);
   grid.activate(Region(0, 0, 0, 2));
   grid.activate(Region(0, 1, 0, 2));
-  REQUIRE(grid.light_units() == 3);
+  REQUIRE(grid.luminous_power() == 5);
 }
 
 TEST_CASE("Disactivate grid not activated yet",
           "[disactivate-not-activated-yet]") {
   auto grid = Grid(1, 3);
   grid.disactivate(Region(0, 0, 0, 2));
-  REQUIRE(grid.light_units() == 0);
+  REQUIRE(grid.luminous_power() == 0);
 }
 
 TEST_CASE("Disactivate part not activated yet has no effect",
@@ -72,7 +65,7 @@ TEST_CASE("Disactivate part not activated yet has no effect",
   auto grid = Grid(1, 4);
   grid.activate(Region(0, 0, 0, 2));
   grid.disactivate(Region(0, 3, 0, 3));
-  REQUIRE(grid.light_units() == 3);
+  REQUIRE(grid.luminous_power() == 3);
 }
 
 TEST_CASE("Disactivate one region contained in another",
@@ -80,7 +73,7 @@ TEST_CASE("Disactivate one region contained in another",
   auto grid = Grid(1, 3);
   grid.activate(Region(0, 0, 0, 2));
   grid.disactivate(Region(0, 0, 0, 1));
-  REQUIRE(grid.light_units() == 1);
+  REQUIRE(grid.luminous_power() == 1);
 }
 
 TEST_CASE("Disactivate overlapping row (span 1)",
@@ -88,7 +81,7 @@ TEST_CASE("Disactivate overlapping row (span 1)",
   auto grid = Grid(1, 5);
   grid.activate(Region(0, 0, 0, 2));
   grid.disactivate(Region(0, 2, 0, 3));
-  REQUIRE(grid.light_units() == 2);
+  REQUIRE(grid.luminous_power() == 2);
 }
 
 TEST_CASE("Disactivate overlapping columns (span 1)",
@@ -96,7 +89,7 @@ TEST_CASE("Disactivate overlapping columns (span 1)",
   auto grid = Grid(5, 1);
   grid.activate(Region(0, 0, 2, 0));
   grid.disactivate(Region(2, 0, 3, 0));
-  REQUIRE(grid.light_units() == 2);
+  REQUIRE(grid.luminous_power() == 2);
 }
 
 TEST_CASE("Disactivate overlapping row (span 2)",
@@ -104,7 +97,7 @@ TEST_CASE("Disactivate overlapping row (span 2)",
   auto grid = Grid(1, 5);
   grid.activate(Region(0, 0, 0, 2));
   grid.disactivate(Region(0, 1, 0, 3));
-  REQUIRE(grid.light_units() == 1);
+  REQUIRE(grid.luminous_power() == 1);
 }
 
 TEST_CASE("Disactivate overlapping columns (span 2)",
@@ -112,7 +105,7 @@ TEST_CASE("Disactivate overlapping columns (span 2)",
   auto grid = Grid(5, 1);
   grid.activate(Region(0, 0, 3, 0));
   grid.disactivate(Region(2, 0, 4, 0));
-  REQUIRE(grid.light_units() == 2);
+  REQUIRE(grid.luminous_power() == 2);
 }
 
 TEST_CASE("Activate partly overlapping regions",
@@ -120,7 +113,7 @@ TEST_CASE("Activate partly overlapping regions",
   auto grid = Grid(1, 5);
   grid.activate(Region(0, 0, 0, 2));
   grid.activate(Region(0, 1, 0, 3));
-  REQUIRE(grid.light_units() == 4);
+  REQUIRE(grid.luminous_power() == 6);
 }
 
 TEST_CASE("Disactivate row that overlaps two rows",
@@ -129,7 +122,7 @@ TEST_CASE("Disactivate row that overlaps two rows",
   grid.activate(Region(0, 0, 0, 1));
   grid.activate(Region(0, 1, 0, 4));
   grid.disactivate(Region(0, 1, 0, 2));
-  REQUIRE(grid.light_units() == 3);
+  REQUIRE(grid.luminous_power() == 4);
 }
 
 TEST_CASE("Disactivate col that overlaps two cols",
@@ -138,7 +131,7 @@ TEST_CASE("Disactivate col that overlaps two cols",
   grid.activate(Region(0, 0, 1, 0));
   grid.activate(Region(1, 0, 4, 0));
   grid.disactivate(Region(1, 0, 2, 0));
-  REQUIRE(grid.light_units() == 3);
+  REQUIRE(grid.luminous_power() == 4);
 }
 
 TEST_CASE("Toggle region that spans outside grid should fail",
@@ -150,30 +143,39 @@ TEST_CASE("Toggle region that spans outside grid should fail",
 TEST_CASE("Toggling fresh grid should activate", "[toggling-fresh]") {
   auto grid = Grid(1, 1);
   grid.toggle(Region(0, 0, 0, 0));
-  REQUIRE(grid.light_units() == 1);
+  REQUIRE(grid.luminous_power() == 1);
 }
 
-TEST_CASE("Toggling activated grid should disactivate", "[toggling-fresh]") {
+TEST_CASE("Toggling activated light should disactivate", "[toggling-fresh]") {
   auto grid = Grid(1, 1);
   grid.activate(Region(0, 0, 0, 0));
   grid.toggle(Region(0, 0, 0, 0));
-  REQUIRE(grid.light_units() == 0);
+  REQUIRE(grid.luminous_power() == 0);
 }
 
-TEST_CASE("Disactivate same region twice", "[disactivate-same-region-twice]") {
-  auto grid = Grid(1, 3);
-  grid.activate(Region(0, 0, 0, 2));
-  grid.disactivate(Region(0, 0, 0, 2));
-  grid.disactivate(Region(0, 0, 0, 2));
-  REQUIRE(grid.light_units() == 0);
+TEST_CASE("Toggling activated then disactived light should activate",
+          "[toggling-flipped]") {
+  auto grid = Grid(1, 1);
+  grid.activate(Region(0, 0, 0, 0));
+  grid.disactivate(Region(0, 0, 0, 0));
+  grid.toggle(Region(0, 0, 0, 0));
+  REQUIRE(grid.luminous_power() == 1);
 }
 
-TEST_CASE("Disactivate same region three times",
-          "[disactivate-same-region-three-times]") {
-  auto grid = Grid(1, 3);
+TEST_CASE("Disactivate same light twice", "[disactivate-same-region-twice]") {
+  auto grid = Grid(1, 1);
+  grid.activate(Region(0, 0, 0, 0));
+  grid.disactivate(Region(0, 0, 0, 0));
+  grid.disactivate(Region(0, 0, 0, 0));
+  REQUIRE(grid.luminous_power() == 0);
+}
+
+TEST_CASE("Disactivate same overlapping twice",
+          "[disactivate-same-overlap-twice]") {
+  auto grid = Grid(1, 4);
   grid.activate(Region(0, 0, 0, 2));
-  grid.disactivate(Region(0, 0, 0, 2));
-  grid.disactivate(Region(0, 0, 0, 2));
-  grid.disactivate(Region(0, 0, 0, 2));
-  REQUIRE(grid.light_units() == 0);
+  grid.disactivate(Region(0, 1, 0, 3));
+  grid.disactivate(Region(0, 1, 0, 3));
+  grid.disactivate(Region(0, 1, 0, 3));
+  REQUIRE(grid.luminous_power() == 1);
 }

@@ -65,8 +65,8 @@ int Region::overlaps(const Region &other) const {
   return n_overlapping_cols * n_overlapping_rows;
 }
 
-int Region::get_light() const { return light_units; }
+int Region::get_luminous_power() const { return light_units; }
 
-void Region::set_light(const int &a_light_units) {
+void Region::set_luminous_power(const int &a_light_units) {
   light_units = a_light_units;
 }
