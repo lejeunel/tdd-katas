@@ -14,8 +14,8 @@ class Region {
     int overlaps(const Region &other) const;
     int get_row_end() const;
     int get_col_end() const;
-    int get_light_units() const;
-    void set_light_units(const int &light_units);
+    int get_light() const;
+    void set_light(const int &light_units);
     std::string to_str() const;
     friend std::ostream &operator<<(std::ostream &os, const Region &region);
 

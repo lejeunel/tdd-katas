@@ -13,16 +13,16 @@ Grid::Grid(const int &a_n_rows, const int &a_n_cols) {
   n_cols = a_n_cols;
 }
 int Grid::light_units() {
-  auto total_light_units = 0;
+  auto total_light = 0;
   for (std::vector<Region>::iterator iter = regions.begin();
        iter != regions.end(); ++iter)
-    total_light_units += (*iter).get_light_units();
-  return total_light_units;
+    total_light += (*iter).get_light();
+  return total_light;
 }
 
 void Grid::activate(Region r) {
   check_is_in_range(r);
-  r.set_light_units(r.size() - overlap_existing_region(r));
+  r.set_light(r.size() - overlap_existing_region(r));
   regions.push_back(r);
 }
 
@@ -30,9 +30,9 @@ void Grid::toggle(Region r) {
   check_is_in_range(r);
   auto overlap = overlap_existing_region(r);
   if (overlap == 0)
-    r.set_light_units(r.size());
+    r.set_light(r.size());
   else
-    r.set_light_units(-overlap);
+    r.set_light(-overlap);
   regions.push_back(r);
 }
 
@@ -40,9 +40,9 @@ void Grid::disactivate(Region r) {
   check_is_in_range(r);
   auto overlap = overlap_existing_region(r);
   if (overlap >= r.size())
-    r.set_light_units(-r.size());
+    r.set_light(-r.size());
   else
-    r.set_light_units(-overlap);
+    r.set_light(-overlap);
 
   regions.push_back(r);
 }

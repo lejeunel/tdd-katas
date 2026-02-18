@@ -91,11 +91,11 @@ TEST_CASE("overlapping columns (span=2)", "[overlapping-cols-span-2]") {
 
 TEST_CASE("new region has zero light emission", "[new-region-zero-light]") {
   auto region = Region(0, 0, 3, 0);
-  REQUIRE(region.get_light_units() == 0);
+  REQUIRE(region.get_light() == 0);
 }
 
 TEST_CASE("setting light units", "[set-light-units]") {
   auto region = Region(0, 0, 3, 0);
-  region.set_light_units(-1);
-  REQUIRE(region.get_light_units() == -1);
+  region.set_light(-1);
+  REQUIRE(region.get_light() == -1);
 }
