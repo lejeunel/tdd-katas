@@ -28,6 +28,7 @@ void Grid::activate(Region r) {
 
 void Grid::disactivate(Region r) {
   check_is_in_range(r);
+
   auto budget = r.size();
   for (const auto &ovr : find_overlapping_regions(r)) {
     auto delta =
@@ -46,25 +47,10 @@ void Grid::toggle(Region r) {
     luminous_power += ovr->get_luminous_power();
   }
 
-  if (luminous_power > 0)
-    r.set_luminous_power(-std::min(r.size(), luminous_power));
-  else
-    r.set_luminous_power(std::max(r.size(), luminous_power));
-
+  r.set_luminous_power(-2 * std::min(r.size(), luminous_power) + r.size());
   add_region(r);
 }
 
-int Grid::overlap_area(const Region &region) {
-  if (regions.size() == 0)
-    return 0;
-
-  int n_overlap = 0;
-  for (const auto &r : regions) {
-    n_overlap += r.overlaps(region);
-  }
-
-  return n_overlap;
-}
 std::vector<const Region *>
 Grid::find_overlapping_regions(const Region &region) {
   std::vector<const Region *> result;
