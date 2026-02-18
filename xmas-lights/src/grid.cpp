@@ -1,4 +1,5 @@
 #include "include/grid.h"
+#include <algorithm>
 #include <format>
 #include <stdexcept>
 
@@ -14,9 +15,8 @@ Grid::Grid(const int &a_n_rows, const int &a_n_cols) {
 }
 int Grid::light_units() {
   auto total_light = 0;
-  for (std::vector<Region>::iterator iter = regions.begin();
-       iter != regions.end(); ++iter)
-    total_light += (*iter).get_light();
+  for (const auto &r : regions)
+    total_light += r.get_light();
   return total_light;
 }
 
@@ -24,6 +24,19 @@ void Grid::activate(Region r) {
   check_is_in_range(r);
   r.set_light(r.size() - overlap_area(r));
   regions.push_back(r);
+}
+
+void Grid::disactivate(Region r) {
+  check_is_in_range(r);
+  auto budget = r.size();
+  for (const auto &ovr : find_overlapping_regions(r)) {
+    auto delta = std::min(budget, std::min(ovr->get_light(), ovr->overlaps(r)));
+    r.set_light(r.get_light() - delta);
+    budget -= delta;
+  }
+
+  if (r.get_light() != 0)
+    regions.push_back(r);
 }
 
 void Grid::toggle(Region r) {
@@ -36,28 +49,25 @@ void Grid::toggle(Region r) {
   regions.push_back(r);
 }
 
-void Grid::disactivate(Region r) {
-  check_is_in_range(r);
-  auto overlap = overlap_area(r);
-  if (overlap >= r.size())
-    r.set_light(-r.size());
-  else
-    r.set_light(-overlap);
-
-  regions.push_back(r);
-}
-
 int Grid::overlap_area(const Region &region) {
   if (regions.size() == 0)
     return 0;
 
   int n_overlap = 0;
-  for (std::vector<Region>::iterator iter = regions.begin();
-       iter != regions.end(); ++iter) {
-    n_overlap += (*iter).overlaps(region);
+  for (const auto &r : regions) {
+    n_overlap += r.overlaps(region);
   }
 
   return n_overlap;
+}
+std::vector<const Region *>
+Grid::find_overlapping_regions(const Region &region) {
+  std::vector<const Region *> result;
+  for (const auto &r : regions) {
+    if (r.overlaps(region) > 0)
+      result.push_back(&r);
+  }
+  return result;
 }
 
 void Grid::check_is_in_range(const Region &region) {

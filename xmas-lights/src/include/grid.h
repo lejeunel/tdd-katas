@@ -17,6 +17,7 @@ private:
   int n_cols;
   std::vector<Region> regions;
   void check_is_in_range(const Region &region);
+  std::vector<const Region *> find_overlapping_regions(const Region &region);
   int overlap_area(const Region &region);
 };
 

@@ -1,12 +1,4 @@
-add_library(xmas-lights
+add_library(xmas_lights_lib
   grid.cpp
   region.cpp
-)
-add_executable(xmas-lights-bin
-  main.cpp)
-
-target_link_libraries(xmas-lights-bin xmas-lights)
-
-install(TARGETS xmas-lights-bin
-  RUNTIME DESTINATION bin
 )

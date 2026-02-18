@@ -84,8 +84,8 @@ TEST_CASE("overlapping rows (span=2)", "[overlapping-rows-span-2]") {
 }
 
 TEST_CASE("overlapping columns (span=2)", "[overlapping-cols-span-2]") {
-  auto first_region = Region(0, 0, 3, 0);
-  auto overlapping_region = Region(2, 0, 4, 0);
+  auto first_region = Region(1, 0, 4, 0);
+  auto overlapping_region = Region(1, 0, 2, 0);
   REQUIRE(first_region.overlaps(overlapping_region) == 2);
 }
 

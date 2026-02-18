@@ -159,3 +159,21 @@ TEST_CASE("Toggling activated grid should disactivate", "[toggling-fresh]") {
   grid.toggle(Region(0, 0, 0, 0));
   REQUIRE(grid.light_units() == 0);
 }
+
+TEST_CASE("Disactivate same region twice", "[disactivate-same-region-twice]") {
+  auto grid = Grid(1, 3);
+  grid.activate(Region(0, 0, 0, 2));
+  grid.disactivate(Region(0, 0, 0, 2));
+  grid.disactivate(Region(0, 0, 0, 2));
+  REQUIRE(grid.light_units() == 0);
+}
+
+TEST_CASE("Disactivate same region three times",
+          "[disactivate-same-region-three-times]") {
+  auto grid = Grid(1, 3);
+  grid.activate(Region(0, 0, 0, 2));
+  grid.disactivate(Region(0, 0, 0, 2));
+  grid.disactivate(Region(0, 0, 0, 2));
+  grid.disactivate(Region(0, 0, 0, 2));
+  REQUIRE(grid.light_units() == 0);
+}

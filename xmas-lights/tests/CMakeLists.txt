@@ -1,10 +1,10 @@
 find_package(Catch2 REQUIRED)
 
-add_executable(test
-  main.cpp
+add_executable(xmas_lights_tests
+  ../../testing/main.cpp
   test_regions.cpp
   test_grid.cpp
-  test.cpp
+  test_lights.cpp
 )
 
-target_link_libraries(test PUBLIC Catch2::Catch2 xmas-lights)
+target_link_libraries(xmas_lights_tests PUBLIC Catch2::Catch2 xmas_lights_lib)
