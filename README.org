@@ -1,0 +1,38 @@
+#+title: TDD Katas
+
+* Development environment and dependencies
+
+- Cmake 4.4.1
+- GCC 15.2.0
+- Catch2 3.12.0  
+
+Optionally, use the provided nix flake by running from repo's root:
+
+#+begin_src shell
+nix develop
+#+end_src
+
+* Building
+
+Head to kata's root directory, e.g.
+#+begin_src shell
+cd xmas-lights
+#+end_src
+
+Configure project:
+
+#+begin_src shell
+mkdir build && \
+cd build && \
+cmake ..
+#+end_src
+
+Build test-suite:
+#+begin_src shell
+make test
+#+end_src
+
+Run test-suite:
+#+begin_src shell
+./tests/test
+#+end_src

@@ -1,3 +1,4 @@
-#+title: Readme
+#+title: Christmas lights
+
 https://kata-log.rocks/christmas-lights-kata
 

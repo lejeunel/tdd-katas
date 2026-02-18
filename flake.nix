@@ -5,8 +5,8 @@
 
   outputs =
     {
-      self,
       nixpkgs,
+      ...
     }:
     let
       supportedSystems = [
