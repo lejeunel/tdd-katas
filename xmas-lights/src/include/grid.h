@@ -17,7 +17,7 @@ private:
   int n_cols;
   std::vector<Region> regions;
   void check_is_in_range(const Region &region);
-  int overlap_existing_region(const Region &region);
+  int overlap_area(const Region &region);
 };
 
 #endif // GRID_H_

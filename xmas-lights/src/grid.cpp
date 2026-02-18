@@ -22,13 +22,13 @@ int Grid::light_units() {
 
 void Grid::activate(Region r) {
   check_is_in_range(r);
-  r.set_light(r.size() - overlap_existing_region(r));
+  r.set_light(r.size() - overlap_area(r));
   regions.push_back(r);
 }
 
 void Grid::toggle(Region r) {
   check_is_in_range(r);
-  auto overlap = overlap_existing_region(r);
+  auto overlap = overlap_area(r);
   if (overlap == 0)
     r.set_light(r.size());
   else
@@ -38,7 +38,7 @@ void Grid::toggle(Region r) {
 
 void Grid::disactivate(Region r) {
   check_is_in_range(r);
-  auto overlap = overlap_existing_region(r);
+  auto overlap = overlap_area(r);
   if (overlap >= r.size())
     r.set_light(-r.size());
   else
@@ -47,7 +47,7 @@ void Grid::disactivate(Region r) {
   regions.push_back(r);
 }
 
-int Grid::overlap_existing_region(const Region &region) {
+int Grid::overlap_area(const Region &region) {
   if (regions.size() == 0)
     return 0;
 
