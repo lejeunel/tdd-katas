@@ -42,12 +42,7 @@ void Grid::disactivate(Region r) {
 
 void Grid::toggle(Region r) {
   check_is_in_range(r);
-  auto luminous_power = 0;
-  for (const auto &ovr : find_overlapping_regions(r)) {
-    luminous_power += ovr->get_luminous_power();
-  }
-
-  r.set_luminous_power(-2 * std::min(r.size(), luminous_power) + r.size());
+  r.set_luminous_power(2 * r.size());
   add_region(r);
 }
 
