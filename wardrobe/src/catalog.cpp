@@ -14,22 +14,21 @@ Combinations Catalog::combinations(const int &wall_size) {
     return Combinations();
 
   auto combinations = Combinations();
-
-  extend_combinations(combinations, List(), wall_size);
-
+  for (const auto &i : items)
+    extend_list(combinations, List().add(i), wall_size);
   return combinations;
 }
 
-void Catalog::extend_combinations(Combinations &combinations, List list,
-                                  const int &wall_size) {
+void Catalog::extend_list(Combinations &combinations, List list,
+                          const int &wall_size) {
   for (const auto &w : items) {
+    if ((list.length() == wall_size) && (!combinations.contains(list))) {
+      combinations.add(list);
+      return;
+    }
     if (wall_size - list.length() >= w.size()) {
       list.add(w);
-      if (list.length() == wall_size) {
-        combinations.add(list);
-        return;
-      }
-      extend_combinations(combinations, list, wall_size);
+      extend_list(combinations, list, wall_size);
     }
   }
 }

@@ -12,8 +12,7 @@ public:
 
 private:
   List items;
-  void extend_combinations(Combinations &combinations, List list,
-                           const int &wall_size);
+  void extend_list(Combinations &combinations, List list, const int &wall_size);
 };
 
 #endif

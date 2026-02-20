@@ -8,3 +8,17 @@ const List &Combinations::operator[](std::size_t index) const {
 }
 
 int Combinations::size() const { return combinations.size(); }
+
+std::vector<List>::const_iterator Combinations::begin() const {
+  return combinations.begin();
+}
+std::vector<List>::const_iterator Combinations::end() const {
+  return combinations.end();
+}
+
+bool Combinations::contains(const List &list) {
+  for (const auto &l : combinations)
+    if (l == list)
+      return true;
+  return false;
+}
