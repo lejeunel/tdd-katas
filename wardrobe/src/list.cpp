@@ -5,12 +5,17 @@
 
 List::List() {};
 
-int List::size() const { return items.size(); };
+std::size_t List::size() const { return items.size(); };
 
 const Item &List::operator[](std::size_t index) const { return items[index]; };
 
 List &List::add(Item item) {
   items.push_back(item);
+  return *this;
+}
+
+List &List::pop() {
+  items.pop_back();
   return *this;
 }
 

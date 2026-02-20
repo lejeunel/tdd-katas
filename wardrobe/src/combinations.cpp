@@ -15,10 +15,3 @@ std::vector<List>::const_iterator Combinations::begin() const {
 std::vector<List>::const_iterator Combinations::end() const {
   return combinations.end();
 }
-
-bool Combinations::contains(const List &list) {
-  for (const auto &l : combinations)
-    if (l == list)
-      return true;
-  return false;
-}

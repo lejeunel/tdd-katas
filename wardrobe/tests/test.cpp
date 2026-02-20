@@ -1,6 +1,5 @@
 #include "../src/include/catalog.h"
 #include <catch2/catch_test_macros.hpp>
-#include <iostream>
 
 TEST_CASE("wall size must be greater than 0", "[wall-size-gt-zero]") {
   auto catalog = Catalog();

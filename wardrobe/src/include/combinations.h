@@ -11,7 +11,6 @@ public:
   const List &operator[](std::size_t index) const;
   std::vector<List>::const_iterator begin() const;
   std::vector<List>::const_iterator end() const;
-  bool contains(const List &list);
 
 private:
   std::vector<List> combinations;

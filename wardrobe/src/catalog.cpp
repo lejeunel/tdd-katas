@@ -14,22 +14,24 @@ Combinations Catalog::combinations(const int &wall_size) {
     return Combinations();
 
   auto combinations = Combinations();
-  for (const auto &i : items)
-    extend_list(combinations, List().add(i), wall_size);
+  auto current = List();
+  find_combinations(combinations, current, wall_size, 0);
   return combinations;
 }
 
-void Catalog::extend_list(Combinations &combinations, List list,
-                          const int &wall_size) {
-  for (const auto &w : items) {
-    if ((list.length() == wall_size) && (!combinations.contains(list))) {
-      combinations.add(list);
-      return;
-    }
-    if (wall_size - list.length() >= w.size()) {
-      list.add(w);
-      extend_list(combinations, list, wall_size);
-    }
+void Catalog::find_combinations(Combinations &combinations, List &list,
+                                int wall_size, std::size_t start_ix) {
+  if (list.length() == wall_size) {
+    combinations.add(list);
+    return;
+  }
+  if (list.length() > wall_size)
+    return;
+
+  for (std::size_t i = start_ix; i < items.size(); ++i) {
+    list.add(items[i]);
+    find_combinations(combinations, list, wall_size, i);
+    list.pop();
   }
 }
 

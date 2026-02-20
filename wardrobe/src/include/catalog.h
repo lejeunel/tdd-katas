@@ -12,7 +12,8 @@ public:
 
 private:
   List items;
-  void extend_list(Combinations &combinations, List list, const int &wall_size);
+  void find_combinations(Combinations &combinations, List &list, int wall_size,
+                         std::size_t start_ix);
 };
 
 #endif
