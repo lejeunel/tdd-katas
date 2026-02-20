@@ -10,6 +10,7 @@ public:
   List &add(Item item);
   List &pop();
   int length() const;
+  float price() const;
 
   const Item &operator[](std::size_t index) const;
   bool operator==(const List &other) const;

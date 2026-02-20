@@ -52,3 +52,10 @@ std::ostream &operator<<(std::ostream &os, const List &list) {
     os << std::format("{} / ", w.name());
   return os;
 }
+
+float List::price() const {
+  float result = 0.;
+  for (const auto &i : items)
+    result += i.price();
+  return result;
+}
