@@ -29,7 +29,7 @@ cmake ..
 
 Build test-suite:
 #+begin_src shell
-make test
+make tests
 #+end_src
 
 Run test-suite:
