@@ -31,15 +31,13 @@ public:
   std::vector<GreetingResponse> responses;
 };
 
-class CLIGreetingOutput : public GreetingOutputPort {
+class StringGreetingPresenter : public GreetingOutputPort {
 public:
-  CLIGreetingOutput(Display &d);
+  StringGreetingPresenter(Display &d);
   void present(const GreetingResponse &);
-  void start_session(const SessionId &);
 
 private:
   Display &display;
-  SessionId session_id;
 };
 
 class GreetingInteractor {

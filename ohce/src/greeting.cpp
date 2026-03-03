@@ -4,8 +4,8 @@
 #include <format>
 #include <stdexcept>
 
-CLIGreetingOutput::CLIGreetingOutput(Display &d) : display(d) {};
-void CLIGreetingOutput::present(const GreetingResponse &r) {
+StringGreetingPresenter::StringGreetingPresenter(Display &d) : display(d) {};
+void StringGreetingPresenter::present(const GreetingResponse &r) {
   if (r.phase == PhaseOfDay::morning) {
     display.insert(std::format("> Good morning, {}!", r.name));
   } else if (r.phase == PhaseOfDay::afternoon) {
@@ -14,7 +14,6 @@ void CLIGreetingOutput::present(const GreetingResponse &r) {
     display.insert(std::format("> Good night, {}!", r.name));
   }
 };
-void CLIGreetingOutput::start_session(const SessionId &id) { session_id = id; };
 
 SpyGreetingPresenter::SpyGreetingPresenter() {};
 void SpyGreetingPresenter::present(const GreetingResponse &r) {

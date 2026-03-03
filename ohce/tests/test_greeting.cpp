@@ -5,7 +5,7 @@
 
 TEST_CASE("greet good morning bob", "[good-morning-bob]") {
   auto display = FakeDisplay();
-  auto presenter = CLIGreetingOutput(display);
+  auto presenter = StringGreetingPresenter(display);
   GreetingResponse r = {.phase = PhaseOfDay::morning, .name = "Bob"};
   presenter.present(r);
   REQUIRE(display.content().back() == "> Good morning, Bob!");
@@ -13,7 +13,7 @@ TEST_CASE("greet good morning bob", "[good-morning-bob]") {
 
 TEST_CASE("greet good morning alice", "[good-morning-alice]") {
   auto display = FakeDisplay();
-  auto presenter = CLIGreetingOutput(display);
+  auto presenter = StringGreetingPresenter(display);
   GreetingResponse r = {.phase = PhaseOfDay::morning, .name = "Alice"};
   presenter.present(r);
   REQUIRE(display.content().back() == "> Good morning, Alice!");
@@ -21,7 +21,7 @@ TEST_CASE("greet good morning alice", "[good-morning-alice]") {
 
 TEST_CASE("greet good afternoon bob", "[good-afternoon-bob]") {
   auto display = FakeDisplay();
-  auto presenter = CLIGreetingOutput(display);
+  auto presenter = StringGreetingPresenter(display);
   GreetingResponse r = {.phase = PhaseOfDay::afternoon, .name = "Bob"};
   presenter.present(r);
   REQUIRE(display.content().back() == "> Good afternoon, Bob!");
