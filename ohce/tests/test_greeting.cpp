@@ -31,7 +31,7 @@ TEST_CASE("at 6:00 greet morning", "[at-6-greet-morning]") {
   auto out = SpyGreetingPresenter();
   auto sr = TestingSessionRepo();
   auto interactor = GreetingInteractor(sr, FakeClock(6));
-  interactor.greet(GreetingInput{.name = "Bob"}, out);
+  interactor.greet(GreetingRequest{.name = "Bob"}, out);
   REQUIRE(out.responses[0].phase == PhaseOfDay::morning);
 }
 
@@ -39,7 +39,7 @@ TEST_CASE("at 12:00 greet afternoon", "[at-12-greet-afternoon]") {
   auto out = SpyGreetingPresenter();
   auto sr = TestingSessionRepo();
   auto interactor = GreetingInteractor(sr, FakeClock(12));
-  interactor.greet(GreetingInput{.name = "Bob"}, out);
+  interactor.greet(GreetingRequest{.name = "Bob"}, out);
   REQUIRE(out.responses[0].phase == PhaseOfDay::afternoon);
 }
 
@@ -47,7 +47,7 @@ TEST_CASE("at 21:00 greet evening", "[at-21-greet-evening]") {
   auto out = SpyGreetingPresenter();
   auto sr = TestingSessionRepo();
   auto interactor = GreetingInteractor(sr, FakeClock(21));
-  interactor.greet(GreetingInput{.name = "Bob"}, out);
+  interactor.greet(GreetingRequest{.name = "Bob"}, out);
   REQUIRE(out.responses[0].phase == PhaseOfDay::evening);
 }
 
@@ -55,7 +55,7 @@ TEST_CASE("greeting with empty username should fail", "[empty-username]") {
   auto out = SpyGreetingPresenter();
   auto sr = TestingSessionRepo();
   auto interactor = GreetingInteractor(sr, FakeClock(0));
-  REQUIRE_THROWS_AS(interactor.greet(GreetingInput{.name = ""}, out),
+  REQUIRE_THROWS_AS(interactor.greet(GreetingRequest{.name = ""}, out),
                     std::invalid_argument);
 }
 
@@ -64,7 +64,7 @@ TEST_CASE("greeting adds a new session and returns the id",
   auto out = SpyGreetingPresenter();
   auto sr = TestingSessionRepo();
   auto interactor = GreetingInteractor(sr, FakeClock(0));
-  interactor.greet(GreetingInput{.name = "Bob"}, out);
+  interactor.greet(GreetingRequest{.name = "Bob"}, out);
 
   REQUIRE(sr.id_exists(out.responses[0].session_id));
   REQUIRE(out.responses[0].session_id != "");

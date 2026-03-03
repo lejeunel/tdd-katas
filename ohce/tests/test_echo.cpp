@@ -21,8 +21,8 @@ TEST_CASE("echo string with invalid session", "[echo-invalid-session]") {
   REQUIRE_THROWS_AS(interactor.interact(in, out), SessionNotFoundException);
 }
 
-TEST_CASE("echo string with valid session", "[echo-invalid-session]") {
-  auto id = SessionId{"invalid-id"};
+TEST_CASE("echo string with valid session", "[echo-valid-session]") {
+  auto id = SessionId{"valid-id"};
   auto in = EchoInput{.session_id = id, .message = "hi!"};
   auto out = SpyEchoPresenter();
   auto sr = TestingSessionRepo();
@@ -38,11 +38,10 @@ TEST_CASE("echo string to a stopped session should fail",
   auto sr = TestingSessionRepo();
   sr.add(id);
 
-  auto stop_in = EchoInput{.session_id = id, .message = "Stop!"};
   auto out = SpyEchoPresenter();
   auto interactor = EchoInteractor(sr);
   interactor.interact(EchoInput{.session_id = id, .message = "Stop!"}, out);
-  REQUIRE(out.responses.size() == 0);
+  REQUIRE(out.responses.size() == 1);
 
   auto in = EchoInput{.session_id = id, .message = "something"};
   REQUIRE_THROWS_AS(interactor.interact(in, out), SessionNotFoundException);

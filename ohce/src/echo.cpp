@@ -22,6 +22,7 @@ void EchoInteractor::interact(const EchoInput &in, EchoOutputPort &out) const {
 
   if (in.message == "Stop!") {
     session_repo.remove(in.session_id);
+    out.present(EchoResponse{.message = "See you later!"});
     return;
   }
   std::string reversed(in.message.rbegin(), in.message.rend());

@@ -23,7 +23,7 @@ void SpyGreetingPresenter::present(const GreetingResponse &r) {
 GreetingInteractor::GreetingInteractor(SessionRepo &s, const Clock &c)
     : session_repo(s), clock(c) {}
 
-void GreetingInteractor::greet(const GreetingInput &in,
+void GreetingInteractor::greet(const GreetingRequest &in,
                                GreetingOutputPort &out) {
   if (in.name.size() == 0)
     throw std::invalid_argument("Username should be non-empty");

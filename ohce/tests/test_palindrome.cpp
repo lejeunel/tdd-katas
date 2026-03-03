@@ -26,6 +26,7 @@ TEST_CASE("echo reversed string without congrats",
   auto pout = SpyPalindromePresenter();
   pi.interact(in, eout, pout);
   REQUIRE(eout.responses.size() == 1);
+  REQUIRE(eout.responses[0].message == "cba");
   REQUIRE(pout.responses.size() == 1);
   REQUIRE(pout.responses[0].is_palindrome == false);
 }

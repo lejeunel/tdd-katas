@@ -8,14 +8,14 @@
 
 enum PhaseOfDay { morning, afternoon, evening };
 
-struct GreetingInput {
+struct GreetingRequest {
   std::string name;
 };
 
 struct GreetingResponse {
   PhaseOfDay phase;
   std::string name;
-  SessionId session_id = "";
+  SessionId session_id;
 };
 
 class GreetingOutputPort {
@@ -43,7 +43,7 @@ private:
 class GreetingInteractor {
 public:
   GreetingInteractor(SessionRepo &sr, const Clock &c);
-  void greet(const GreetingInput &in, GreetingOutputPort &out);
+  void greet(const GreetingRequest &in, GreetingOutputPort &out);
 
 private:
   SessionRepo &session_repo;
