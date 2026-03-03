@@ -1,7 +1,13 @@
 #include "include/exceptions.h"
 
-InteractOnStoppedSessionException::InteractOnStoppedSessionException() {};
+StoppedSessionException::StoppedSessionException() {};
 
-const char *InteractOnStoppedSessionException::what() const noexcept {
-  return "InteractOnStoppedSessionException occured";
+const char *StoppedSessionException::what() const noexcept {
+  return "session is stopped";
+}
+
+SessionNotFoundException::SessionNotFoundException() {};
+
+const char *SessionNotFoundException::what() const noexcept {
+  return "session does not exist";
 }

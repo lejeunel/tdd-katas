@@ -2,9 +2,15 @@
 #define EXCEPTIONS_H_
 #include <exception>
 
-class InteractOnStoppedSessionException : public std::exception {
-  public:
-    explicit InteractOnStoppedSessionException();
-    const char *what() const noexcept override;
+class StoppedSessionException : public std::exception {
+public:
+  explicit StoppedSessionException();
+  const char *what() const noexcept override;
+};
+
+class SessionNotFoundException : public std::exception {
+public:
+  explicit SessionNotFoundException();
+  const char *what() const noexcept override;
 };
 #endif // EXCEPTIONS_H_

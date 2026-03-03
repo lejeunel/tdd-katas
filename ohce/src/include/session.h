@@ -1,17 +1,27 @@
 #ifndef SESSION_H_
 #define SESSION_H_
-#include <string>
 
-class Session {
+#include <string>
+#include <vector>
+
+typedef std::string SessionId;
+
+class SessionRepo {
 public:
-  Session(const std::string &username);
-  const std::string &get_username() const;
-  bool is_stopped() const;
-  void stop();
+  virtual bool id_exists(const SessionId &) = 0;
+  virtual void add(const SessionId &) = 0;
+  virtual void remove(const SessionId &) = 0;
+};
+
+class TestingSessionRepo : public SessionRepo {
+public:
+  TestingSessionRepo();
+  bool id_exists(const SessionId &);
+  void add(const SessionId &);
+  void remove(const SessionId &);
 
 private:
-  std::string username;
-  bool is_stopped_ = false;
+  std::vector<SessionId> known_session_ids;
 };
 
 #endif // SESSION_H_

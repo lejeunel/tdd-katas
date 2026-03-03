@@ -1,10 +1,17 @@
 #include "include/session.h"
+#include <cstddef>
 
-Session::Session(const std::string &a_username)
-    : username(a_username), is_stopped_(false) {};
+TestingSessionRepo::TestingSessionRepo() {};
+bool TestingSessionRepo::id_exists(const SessionId &id) {
+  for (std::size_t i = 0; i < known_session_ids.size(); ++i)
+    if (known_session_ids[i] == id)
+      return true;
 
-const std::string &Session::get_username() const { return username; }
-
-bool Session::is_stopped() const { return is_stopped_; }
-
-void Session::stop() { is_stopped_ = true; }
+  return false;
+};
+void TestingSessionRepo::add(const SessionId &id) {
+  known_session_ids.push_back(id);
+};
+void TestingSessionRepo::remove(const SessionId &id) {
+  std::erase(known_session_ids, id);
+};
